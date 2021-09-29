@@ -8,7 +8,7 @@ import { AddToCart } from "../../../components/add-to-cart"
 import { NumericInput } from "../../../components/numeric-input"
 import { formatPrice } from "../../../utils/format-price"
 import { Seo } from "../../../components/seo"
-import { CgChevronRight as ChevronIcon } from "react-icons/cg"
+import slugify from "@sindresorhus/slugify"
 import {
   productBox,
   container,
@@ -27,12 +27,14 @@ import {
   addToCartStyle,
   metaSection,
   productDescription,
+  srOnly
 } from "./product-page.module.css"
 
 export default function Product({ data: { product, suggestions } }) {
   const {
     options,
     variants,
+    vendor,
     variants: [initialVariant],
     priceRangeV2,
     title,
@@ -134,7 +136,7 @@ export default function Product({ data: { product, suggestions } }) {
                             ? image.altText
                             : `Product Image of ${title} #${index + 1}`
                         }
-                        image={image.gatsbyImageData}
+                        image={productVariant.image.gatsbyImageData}
                       />
                     </li>
                   ))}
@@ -153,8 +155,7 @@ export default function Product({ data: { product, suggestions } }) {
           )}
           <div>
             <div className={breadcrumb}>
-              <Link to={product.productTypeSlug}>{product.productType}</Link>
-              <ChevronIcon size={12} />
+              <Link to={`/products/vendor/${slugify(vendor)}`}>{vendor}</Link>
             </div>
             <h1 className={header}>{title}</h1>
             <p className={productDescription}>{description}</p>
@@ -162,12 +163,14 @@ export default function Product({ data: { product, suggestions } }) {
               <span>{price}</span>
             </h2>
             <fieldset className={optionsWrapper}>
+              <label className={srOnly} for={`var--${options[0].name}`}>{options[0].name}</label>
               {hasVariants &&
                 options.map(({ id, name, values }, index) => (
                   <div className={selectVariant} key={id}>
                     <select
                       aria-label="Variants"
                       onChange={(event) => handleOptionChange(index, event)}
+                      id={`var--${name}`}
                     >
                       <option value="">{`Select ${name}`}</option>
                       {values.map((value) => (
@@ -176,7 +179,9 @@ export default function Product({ data: { product, suggestions } }) {
                         </option>
                       ))}
                     </select>
+
                   </div>
+
                 ))}
             </fieldset>
             <div className={addToCartStyle}>
@@ -196,14 +201,9 @@ export default function Product({ data: { product, suggestions } }) {
               />
             </div>
             <div className={metaSection}>
-              <span className={labelFont}>Type</span>
-              <span className={tagList}>
-                <Link to={product.productTypeSlug}>{product.productType}</Link>
-              </span>
-              <span className={labelFont}>Tags</span>
-              <span className={tagList}>
-                {product.tags.map((tag) => (
-                  <Link to={`/search?t=${tag}`}>{tag}</Link>
+              <span className={labelFont}>
+                {productVariant.metafields.map((metafield) => (
+                  <div>{metafield.key}: <span className={tagList}>{metafield.value}</span></div>
                 ))}
               </span>
             </div>
@@ -241,13 +241,21 @@ export const query = graphql`
         gatsbyImageData(layout: CONSTRAINED, width: 640, aspectRatio: 1)
       }
       variants {
+        id
         availableForSale
         storefrontId
         title
         price
+        image {
+          gatsbyImageData
+        }
         selectedOptions {
           name
           value
+        }
+        metafields {
+          value
+          key
         }
       }
       options {
@@ -255,6 +263,7 @@ export const query = graphql`
         values
         id
       }
+      vendor
     }
     suggestions: allShopifyProduct(
       limit: 3
