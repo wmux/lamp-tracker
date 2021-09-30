@@ -136,7 +136,7 @@ export default function Product({ data: { product, suggestions } }) {
                             ? image.altText
                             : `Product Image of ${title} #${index + 1}`
                         }
-                        image={productVariant.image.gatsbyImageData}
+                        image={image.gatsbyImageData}
                       />
                     </li>
                   ))}
@@ -163,7 +163,7 @@ export default function Product({ data: { product, suggestions } }) {
               <span>{price}</span>
             </h2>
             <fieldset className={optionsWrapper}>
-              <label className={srOnly} for={`var--${options[0].name}`}>{options[0].name}</label>
+              <label className={srOnly} htmlFor={`var--${options[0].name}`}>{options[0].name}</label>
               {hasVariants &&
                 options.map(({ id, name, values }, index) => (
                   <div className={selectVariant} key={id}>

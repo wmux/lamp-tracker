@@ -10,3 +10,24 @@ body {
 .gatsby-image-wrapper [data-main-image] {
   border-radius: var(--radius-sm);
 }
+
+@font-face {
+  font-family: "Maax";
+  font-style: normal;
+  font-weight: 400;
+  src: url('../../static/fonts/maax-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "Maax";
+  font-style: normal;
+  font-weight: 700;
+  src: url('../../static/fonts/maax-bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "Maax";
+  font-style: normal;
+  font-weight: 900;
+  src: url('../../static/fonts/maax-black.woff2') format('woff2');
+}

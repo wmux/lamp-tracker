@@ -1,6 +1,6 @@
 .title {
   font-size: var(--text-display);
-  font-weight: var(--bold);
+  font-weight: var(--black);
   margin: 0;
   padding: var(--space-2xl) var(--size-gutter-raw) var(--space-2xl);
 }
