@@ -22,3 +22,6 @@
   color: #767676;
   cursor: not-allowed;
 }
+.addToCart[disabled]:hover {
+  box-shadow: none;
+}
