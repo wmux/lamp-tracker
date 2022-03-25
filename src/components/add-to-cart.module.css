@@ -16,3 +16,9 @@
 .addToCart:hover {
   box-shadow: var(--shadow);
 }
+
+.addToCart[disabled] {
+  background-color: #f4f4f4;
+  color: #767676;
+  cursor: not-allowed;
+}
